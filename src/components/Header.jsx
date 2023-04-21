@@ -6,7 +6,7 @@ export const Header = () => {
     const [darkMode, setDarkMode] = useState(false);
 
     const color = useContext(ThemeContext);
-    console.log(color);
+
     const onHandleClic = () => {
         setDarkMode(!darkMode);
     }
