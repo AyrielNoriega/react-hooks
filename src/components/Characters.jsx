@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from "react"
+import { useEffect, useMemo, useReducer, useState } from "react"
 
 const initialState = {
     favorites: []
@@ -20,6 +20,7 @@ const favoriteReducer = (state, action) => {
 export const Characters = () => {
 
     const [characters, setCharacters] = useState([])
+    const [search, setSearch] = useState('');
 
     const [favorites, dispatch] = useReducer(favoriteReducer, initialState);
 
@@ -34,6 +35,20 @@ export const Characters = () => {
         console.log(favorite);
         dispatch({type: 'ADD_TO_FAVORITE', payload: favorite});
     }
+
+    const onSearch = (e) => {
+        setSearch(e.target.value);
+    }
+
+    // const filteredUsers = characters.filter((user) => {
+    //     console.log('inicia');
+    //     return user.name.toLowerCase().includes(search.toLowerCase())
+    // })
+
+    const filteredUsers = useMemo(() => 
+        characters.filter((user) => {
+            return user.name.toLowerCase().includes(search.toLowerCase())
+        }), [characters, search])
     
     return (
         <div className="characters">
@@ -44,7 +59,11 @@ export const Characters = () => {
                 </li>
             ))}
 
-            {characters.map(character => (
+            <div className="search">
+                <input type="text" value={search} onChange={onSearch} />
+            </div>
+
+            {filteredUsers.map(character => (
                 <div className="className" key={character.id}>
                     <h2>{character.name}</h2>
                     <button type="button" onClick={() => onHandleClic(character)}>
